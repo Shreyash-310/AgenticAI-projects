@@ -12,6 +12,7 @@ from langchain_core.output_parsers import StrOutputParser
 from sqlalchemy import text, inspect
 from langgraph.graph import StateGraph, END
 
+import io
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -336,9 +337,12 @@ def regenerate_query(state: AgentState):
 
 def generate_funny_response(state: AgentState):
     # print("Generating a funny response for an unrelated question.")
-    system = """You are a charming and funny assistant who responds in a playful manner.
+    system = """You are a SQL expert with a strong attention to detail.
+    And you have got asked the ir-relevant question respect to the database.
+    In this scenario please notify the user to ask the question related to the database.
     """
-    human_message = "I can not help with that, but doesn't asking questions make you hungry? You can always order something delicious."
+    # human_message = "I can not help with that, but doesn't asking questions make you hungry? You can always order something delicious."
+    human_message = "Query was not relevant to the database. In this scenario please notify the user to ask the question related to the database."
     funny_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", system),
@@ -444,6 +448,7 @@ if __name__ == '__main__':
         st.session_state.show_image = False  # Image visibility state
         st.session_state.query_result = None  # Store query results
         st.session_state.app = None 
+        st.session_state.workflow_image = None
 
     st.sidebar.header("Settings")
     
@@ -488,10 +493,11 @@ if __name__ == '__main__':
     if query and query != st.session_state.get("last_query"):
         if st.session_state.app:
             try:
-                st.session_state.query_result = st.session_state.app.invoke(
-                    {"question": query, "attempts": 0},
-                    config={"configurable": {"current_user_id": "1"}}
-                    )
+                with st.spinner("Processing....."):
+                    st.session_state.query_result = st.session_state.app.invoke(
+                        {"question": query, "attempts": 0},
+                        config={"configurable": {"current_user_id": "1"}}
+                        )
                 st.session_state.last_query = query  # Store last processed query
             except Exception as e:
                 st.error(f"Error executing query: {e}")
@@ -503,10 +509,11 @@ if __name__ == '__main__':
     if st.session_state.query_result:
         st.subheader("Query Result:")
         try:
-            st.write("SQL Query")
-            formatted_query = sqlparse.format(st.session_state.query_result["sql_query"], reindent=True, keyword_case='upper')
-            # print(f"formatted_query\n{formatted_query}")
-            st.code(formatted_query, language="sql")
+            if st.session_state.query_result['relevance'] == 'relevant':
+                st.write("SQL Query")
+                formatted_query = sqlparse.format(st.session_state.query_result["sql_query"], reindent=True, keyword_case='upper')
+                # print(f"formatted_query\n{formatted_query}")
+                st.code(formatted_query, language="sql")
             st.write("Answer")
             st.write(st.session_state.query_result["query_result"])
         except Exception as e:
