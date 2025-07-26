@@ -15,7 +15,7 @@ from langgraph.graph import StateGraph, END
 import io
 import os
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(dotenv_path='../../.env')
 
 import streamlit as st
 

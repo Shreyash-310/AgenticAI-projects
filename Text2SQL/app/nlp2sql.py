@@ -10,7 +10,7 @@ from langgraph.graph import StateGraph, END
 
 import os
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(dotenv_path='../../.env')
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
