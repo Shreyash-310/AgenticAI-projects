@@ -14,7 +14,7 @@ from autogen.code_utils import DEFAULT_MODEL, UNKNOWN, content_str, execute_code
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path='../.env')
 
 config_list_gemini = autogen.config_list_from_json(
     "OAI_CONFIG_LIST",

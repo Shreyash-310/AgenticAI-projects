@@ -3,12 +3,12 @@ import autogen
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path='../.env')
 
 config_list = [
     {
         'model':'gpt-3.5-turbo-16k',
-        'api_key': os.getenv('OPENAI_API_KEY ')
+        'api_key': os.getenv('OPENAI_API_KEY')
     }
 ]
 
