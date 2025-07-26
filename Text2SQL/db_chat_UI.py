@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(dotenv_path='../.env')
 
 class sql_agent:
     def __init__(self, database_path:str):
