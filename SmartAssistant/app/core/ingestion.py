@@ -38,7 +38,7 @@ def load_and_split_documents(file_paths, chunk_size=1000, chunk_overlap=200):
     chunks = text_splitter.split_documents(all_docs)
     # chunks = text_splitter.split_text(all_docs)
     print(len(chunks))
-    print(chunks[:5])
+    # print(chunks[:5])
     print(f"Loaded {len(all_docs)} documents, created {len(chunks)} chunks.")
     return chunks
 

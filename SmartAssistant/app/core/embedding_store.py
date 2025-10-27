@@ -29,7 +29,7 @@ def create_faiss_index(documents, index_path="data/faiss_index",
         print("Huggging Face Model Loaded Successfully.....")  
         if embeddings is None:
             raise RuntimeError("Embedding model could not be initialized.")
-        input('Before creating faiss vector store')
+        # input('Before creating faiss vector store')
         vectorstore = FAISS.from_documents(documents, embeddings)
         vectorstore.save_local(index_path)
         print(f"✅ FAISS index created and saved at: {index_path}")
