@@ -71,7 +71,7 @@ def check_relevance(state: AgentState, config: RunnableConfig, schema):
     llm = ChatGroq(
         temperature = 0,
         groq_api_key = os.getenv("groq_api_key"),
-        model_name = os.getenv("llama_model_name1")
+        model_name = os.getenv("llama_model_name")
         )
 
     structured_llm = llm.with_structured_output(CheckRelevance)
@@ -132,7 +132,7 @@ def convert_nl_to_sql(state: AgentState, config: RunnableConfig, schema):
     llm = ChatGroq(
         temperature = 0,
         groq_api_key = os.getenv("groq_api_key"),
-        model_name = os.getenv("llama_model_name1")
+        model_name = os.getenv("llama_model_name")
         )
     
     structured_llm = llm.with_structured_output(ConvertToSQL)
@@ -262,7 +262,7 @@ def generate_human_readable_answer(state: AgentState):
     llm = ChatGroq(
         temperature = 0,
         groq_api_key = os.getenv("groq_api_key"),
-        model_name = os.getenv("llama_model_name1")
+        model_name = os.getenv("llama_model_name")
         )
 
     human_response = generate_prompt | llm | StrOutputParser()
@@ -293,7 +293,7 @@ def regenerate_query(state: AgentState):
     llm = ChatGroq(
         temperature = 0,
         groq_api_key = os.getenv("groq_api_key"),
-        model_name = os.getenv("llama_model_name1")
+        model_name = os.getenv("llama_model_name")
     )
 
     structured_llm = llm.with_structured_output(RewrittenQuestion)
@@ -321,7 +321,7 @@ def generate_funny_response(state: AgentState):
     llm = ChatGroq(
     temperature = 0.7,
     groq_api_key = os.getenv("groq_api_key"),
-    model_name = os.getenv("llama_model_name1")
+    model_name = os.getenv("llama_model_name")
 )
     funny_response = funny_prompt | llm | StrOutputParser()
     message = funny_response.invoke({})
@@ -410,16 +410,18 @@ def create_workflow(schema, session):
 
 if __name__ == '__main__':
 
-    engine = create_engine("sqlite:///D:/GenAI-Practice/AgenticAI-Projects/Text2SQL/data/sql/bank_domain.db")
+    # engine = create_engine("sqlite:///D:/GenAI-Practice/AgenticAI-Projects/Text2SQL/data/sql/bank_domain.db")
+    engine = create_engine("sqlite:///D:/GenAI-Practice/AgenticAI-Projects/SmartAssistant/app/data/uploads/system_details.db")
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base = declarative_base()
 
     db_schema = get_database_schema(engine)
-
+    print(db_schema)
     app = create_workflow(schema=db_schema, session=SessionLocal)
 
-    query = "For each loan type, what is the total amount loaned, the average interest rate, and the percentage of loans that are currently 'Active'?"
-
+    # query = "For each loan type, what is the total amount loaned, the average interest rate, and the percentage of loans that are currently 'Active'?"
+    query = "As per system, what is the system data for the provision 'Notice of withdrawal' for the plan?"
+    query = "What is the system data for the provision value of 'Notice of withdrawal' for the plan?"
     query_result = app.invoke(
         {"question": query, "attempts": 0},
         config={"configurable": {"current_user_id": "1"}}
