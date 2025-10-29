@@ -1,10 +1,14 @@
 from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains import RetrievalQA
-# from core.embedding_utils import get_huggingface_embedding
+# from chatbot.state import ChatbotState
+from chatbot.state import ChatbotState
 
 import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
+
+from dotenv import load_dotenv
+load_dotenv(dotenv_path='D:/GenAI-Practice/AgenticAI-Projects/SmartAssistant/.env')
 
 def get_huggingface_embedding(model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
     """
@@ -21,12 +25,6 @@ def get_huggingface_embedding(model_name: str = "sentence-transformers/all-MiniL
     except Exception as e:
         print(f"⚠️ Error initializing Hugging Face Embedding model: {e}")
         return None
-
-from chatbot.state import ChatbotState
-# from state import ChatbotState
-
-from dotenv import load_dotenv
-load_dotenv(dotenv_path='D:/GenAI-Practice/AgenticAI-Projects/SmartAssistant/.env')
 
 def rag_node(state: ChatbotState) -> ChatbotState:
     """

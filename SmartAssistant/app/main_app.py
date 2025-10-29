@@ -9,15 +9,24 @@ st.title("📘 Smart Assistant - Document Ingestion and Embedding")
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-uploaded_files = st.file_uploader(
+pdf_files = st.sidebar.file_uploader(
     "Upload your documents (PDF, DOCX, TXT)", 
     type=["pdf", "docx", "txt"],
-    accept_multiple_files=True
-)
+    accept_multiple_files=True)
 
-if uploaded_files and st.button("Process Documents"):
+db_file = st.sidebar.file_uploader(
+    "Upload DataBase File",
+    type = ["db", "sqlite"])
+
+process_btn = st.sidebar.button('Process Files')
+
+# if process_btn:
+#     if not pdf_files or not db_file:
+#         st.sidebar.warning("Please upload at least one files before processing...")
+
+if pdf_files and st.button("Process Documents"):
     saved_paths = []
-    for file in uploaded_files:
+    for file in pdf_files:
         file_path = os.path.join(UPLOAD_DIR, file.name)
         with open(file_path, "wb") as f:
             f.write(file.getbuffer())
