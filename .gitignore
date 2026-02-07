@@ -1,3 +1,4 @@
 .env
 autogenAI/OAI_CONFIG_LIST
 SmartAssistant/.env
+.vscode/
