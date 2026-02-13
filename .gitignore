@@ -5,3 +5,5 @@ SmartAssistant/.env
 
 # sample database file, for local testing not to be tracked by git
 Text2SQL/data/sql/olistbr_ecommerce.db
+
+chatbot/data/chatbot.db
